@@ -12,3 +12,6 @@ netpulse
 
 # Fichier de config personnel (si l'utilisateur en crée un différent de l'exemple)
 targets.local.conf
+
+netpulse.out
+netpulse.pid

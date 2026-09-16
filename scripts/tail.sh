@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 # Affiche les dernières lignes du log netpulse.log en continu.
-# Implémentation prévue à l'étape 3.
-echo "TODO (étape 3) : tail -f netpulse.log"
+LOGFILE="${1:-netpulse.log}"
+
+if [ ! -f "$LOGFILE" ]; then
+    echo "fichier de log introuvable : $LOGFILE"
+    exit 1
+fi
+
+tail -f "$LOGFILE"
