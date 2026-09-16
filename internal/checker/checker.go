@@ -55,6 +55,13 @@ func Check(target string, timeout, slowThreshold time.Duration) Result {
 	} else {
 		r = checkTCP(target, timeout)
 	}
+	return applySlowThreshold(r, slowThreshold)
+}
+
+// applySlowThreshold marque le résultat comme Slow si la cible est up et que
+// sa latence dépasse le seuil donné. Fonction pure, isolée du réseau pour
+// pouvoir être testée sans dépendre du timing réel d'une connexion.
+func applySlowThreshold(r Result, slowThreshold time.Duration) Result {
 	if r.Up && slowThreshold > 0 && r.Latency > slowThreshold {
 		r.Slow = true
 	}
