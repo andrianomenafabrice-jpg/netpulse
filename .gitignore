@@ -1,0 +1,14 @@
+# Binaire compilé
+netpulse
+/bin/
+
+# Logs générés à l'exécution
+*.log
+
+# Fichiers spécifiques à l'OS / éditeur
+.DS_Store
+.idea/
+.vscode/
+
+# Fichier de config personnel (si l'utilisateur en crée un différent de l'exemple)
+targets.local.conf
