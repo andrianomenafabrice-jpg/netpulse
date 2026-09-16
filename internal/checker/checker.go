@@ -15,6 +15,7 @@ import (
 type Result struct {
 	Target  string
 	Up      bool
+	Slow    bool
 	Latency time.Duration
 	Err     error
 }
@@ -46,11 +47,18 @@ func LoadTargets(path string) ([]string, error) {
 // Check vérifie une cible et retourne le résultat.
 // Si la cible commence par http:// ou https://, une requête HEAD est envoyée.
 // Sinon, la cible est traitée comme une IP/hôte et vérifiée en TCP sur le port 80.
-func Check(target string, timeout time.Duration) Result {
+// slowThreshold : si la latence dépasse ce seuil, le résultat est marqué Slow (0 = désactivé).
+func Check(target string, timeout, slowThreshold time.Duration) Result {
+	var r Result
 	if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
-		return checkHTTP(target, timeout)
+		r = checkHTTP(target, timeout)
+	} else {
+		r = checkTCP(target, timeout)
 	}
-	return checkTCP(target, timeout)
+	if r.Up && slowThreshold > 0 && r.Latency > slowThreshold {
+		r.Slow = true
+	}
+	return r
 }
 
 func checkHTTP(target string, timeout time.Duration) Result {

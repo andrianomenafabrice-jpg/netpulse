@@ -45,6 +45,8 @@ func (l *Logger) Write(r checker.Result, jsonOutput bool) {
 	status := "OK"
 	if !r.Up {
 		status = "DOWN"
+	} else if r.Slow {
+		status = "SLOW"
 	}
 
 	var line string
